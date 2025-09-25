@@ -1,0 +1,52 @@
+# =========================
+# Core numerics & data
+# =========================
+numpy<2
+pandas
+openpyxl
+ipywidgets
+
+# =========================
+# Visualization & Apps
+# =========================
+matplotlib
+streamlit
+
+# =========================
+# Classical ML & Stats
+# =========================
+scikit-learn
+statsmodels
+prophet
+
+# =========================
+# LLMs & Agent tooling
+# =========================
+transformers
+accelerate
+peft
+bitsandbytes
+huggingface_hub
+langchain
+openai
+pydantic-ai
+
+# =========================
+# Sequence models & CUDA extensions
+# (require compatible CUDA/PyTorch)
+# =========================
+mamba-ssm
+selective_scan_cuda
+
+# =========================
+# Deep Learning (TF/Keras)
+# =========================
+tf-keras
+
+# =========================
+# Evaluation & Diagnostics
+# =========================
+evaluate
+rouge_score
+sacrebleu
+weightwatcher
