@@ -47,10 +47,13 @@ pip install -r requirements.txt
 ```
 
 3. Configure your environment:
-   - Create a `.env` file with your HuggingFace token:
+   - Copy the template file and add your HuggingFace token:
+     ```bash
+     cp .env_template .env
+     # Edit .env and add your HuggingFace token
      ```
-     HUGGINGFACE_HUB_TOKEN=your_token_here
-     ```
+   - Get your HuggingFace token from: https://huggingface.co/settings/tokens
+   - Update the paths in `.env` to match your local setup
 
 ## Project Structure
 ```
