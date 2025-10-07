@@ -43,8 +43,14 @@ cd InductiveSLM
 
 2. Install dependencies:
 ```bash
+# Basic installation (recommended for most users)
 pip install -r requirements.txt
+
+# Optional: If you have CUDA and need Mamba models
+pip install -r requirements-cuda.txt
 ```
+
+**Note**: The basic installation works on all platforms (CPU, GPU, ARM64). CUDA-specific packages (mamba-ssm, selective_scan_cuda) are optional and only needed for Mamba models.
 
 3. Configure your environment:
    - Copy the template file and add your HuggingFace token:

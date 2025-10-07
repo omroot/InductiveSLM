@@ -33,15 +33,17 @@ pydantic-ai
 
 # =========================
 # Sequence models & CUDA extensions
-# (require compatible CUDA/PyTorch)
+# (OPTIONAL - require compatible CUDA/PyTorch)
+# Uncomment only if you need Mamba models and have CUDA support
 # =========================
-mamba-ssm
-selective_scan_cuda
+# mamba-ssm
+# selective_scan_cuda
 
 # =========================
 # Deep Learning (TF/Keras)
+# (OPTIONAL - uncomment if needed)
 # =========================
-tf-keras
+# tf-keras
 
 # =========================
 # Evaluation & Diagnostics

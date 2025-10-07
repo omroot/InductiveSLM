@@ -1,0 +1,10 @@
+# Optional CUDA-specific requirements
+# Install only if you have CUDA support and need these features
+# pip install -r requirements-cuda.txt
+
+# Mamba SSM models (requires CUDA)
+mamba-ssm
+selective_scan_cuda
+
+# TensorFlow/Keras (optional, for some legacy models)
+tf-keras
