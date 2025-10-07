@@ -8,3 +8,9 @@ __pycache__/
 *.command
 *.csv
 *.parquet
+
+# Model outputs and cache
+cache/models/
+*.bin
+*.safetensors
+checkpoint-*/

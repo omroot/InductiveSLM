@@ -31,12 +31,55 @@ if DEBUG:
 else:
     ROOT_DIR = PROD_ROOT_DIR
 
+# MODEL_ID_LIST = ["Qwen/Qwen2-0.5B-Instruct" ,
+#                 "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+#                 "Qwen/Qwen2.5-1.5B-Instruct",
+#                 "google/gemma-2-2b-it",
+#                 "microsoft/Phi-3-mini-4k-instruct",
+#                 "google/gemma-3-4b-it" ,
+#                 "deepseek-ai/deepseek-llm-7b-base" ,
+#                 "allenai/OLMo-7B-0424-hf" ,
+#                 "google/gemma-7b-it" ,
+#                 "Qwen/Qwen3-8B" ,
+#                 "unsloth/Meta-Llama-3.1-8B" ,
+#                 "swiss-ai/Apertus-8B-2509",
+#                 "01-ai/Yi-9B" ,
+#                 "google/gemma-2-9b" ]
 
 
+MODEL_ID_LIST = [
+    "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+    "Qwen/Qwen2.5-1.5B-Instruct",
+    "google/gemma-2-2b-it",
+    "deepseek-ai/deepseek-llm-7b-base",
+    "allenai/OLMo-7B-0424-hf",
+    "google/gemma-7b-it",
+    "unsloth/Meta-Llama-3.1-8B",
+    "swiss-ai/Apertus-8B-2509",
+    "google/gemma-2-9b",
+    "01-ai/Yi-9B"
+]
+
+# Output directories for each model (under cache/models/)
+OUTPUT_DIRS = {
+    "TinyLlama/TinyLlama-1.1B-Chat-v1.0": "tinyllama_1.1b_chat",
+    "Qwen/Qwen2.5-1.5B-Instruct": "qwen2.5_1.5b_instruct",
+    "google/gemma-2-2b-it": "gemma2_2b_it",
+    "deepseek-ai/deepseek-llm-7b-base": "deepseek_7b_base",
+    "allenai/OLMo-7B-0424-hf": "olmo_7b",
+    "google/gemma-7b-it": "gemma_7b_it",
+    "unsloth/Meta-Llama-3.1-8B": "llama3.1_8b",
+    "swiss-ai/Apertus-8B-2509": "apertus_8b",
+    "google/gemma-2-9b": "gemma2_9b",
+    "01-ai/Yi-9B": "yi_9b"
+}
+
+# Base directory for model outputs
+BASE_OUTPUT_DIR = "cache/models"
 
 # Configuration - GPU Optimized
-MODEL_ID = "Qwen/Qwen2-0.5B-Instruct" 
-OUTPUT_DIR = "swiss_apertus_8b_ft_inductive_smalllm_compare"
+MODEL_ID = "Qwen/Qwen2-0.5B-Instruct"
+OUTPUT_DIR = "qwen_500m_ft_inductive_slm"  # Legacy single model output
 SEED = 42
 VAL_FRACTION = 0.30
 MAX_SEQ_LEN = 512  # Increased for GPU performance

@@ -46,7 +46,30 @@ InductiveSLM/
 
 ## Usage
 
-### Quick Start with Jupyter
+### Quick Start - Single Model
+
+Evaluate a single model:
+```bash
+python run_evaluation.py
+```
+
+### Batch Evaluation - Multiple Models
+
+Evaluate all models in the model list:
+```bash
+python run_batch_evaluation.py
+```
+
+Or select specific models:
+```bash
+python run_selective_evaluation.py --small  # Evaluate small models only
+python run_selective_evaluation.py 0 1 2    # Evaluate models at indices 0, 1, 2
+```
+
+See [BATCH_EVALUATION_GUIDE.md](BATCH_EVALUATION_GUIDE.md) for detailed instructions.
+
+### Jupyter Notebooks
+
 Launch JupyterLab and open `notebooks/main.ipynb`:
 ```bash
 jupyter lab
