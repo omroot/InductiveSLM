@@ -4,7 +4,7 @@
 
 # Mamba SSM models (requires CUDA)
 mamba-ssm
-selective_scan_cuda
+#selective_scan_cuda
 
 # TensorFlow/Keras (optional, for some legacy models)
 tf-keras
