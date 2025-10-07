@@ -7,7 +7,9 @@ This repository implements methods for fine-tuning small language models to enha
 
 📄 **Paper**: [Inductive Triplet Fine-Tuning for Small Language Models](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5529459)
 
-📊 **IR-Triplet Dataset**: Available on HuggingFace (link to be added)
+📊 **IR-Triplet Dataset**:
+- **Local**: Available in this repository at `cache/raw_data/ir_triplets/ir_triplets.json`
+- **HuggingFace**: [Coming soon]
 
 ### Citation
 
@@ -61,7 +63,12 @@ InductiveSLM/
 │   ├── models/        # Model training and inference
 │   ├── preprocess/    # Dataset preprocessing (DEER, triplets)
 │   └── utils/         # Utility functions for I/O
-├── cache/             # Cached data
+├── cache/
+│   ├── raw_data/      # Raw datasets
+│   │   ├── ir_triplets/    # IR-Triplet benchmark dataset
+│   │   │   └── ir_triplets.json
+│   │   └── deer/      # DEER dataset
+│   └── models/        # Model outputs and evaluation results
 └── requirements.txt   # Python dependencies
 ```
 
@@ -152,7 +159,9 @@ metrics = eval_metrics(predictions, references, rouge, bleu)
 
 The **IR-Triplet benchmark** is a novel dataset for evaluating inductive reasoning in language models. It consists of triplet-based inductive reasoning tasks designed to test models' ability to generalize from observations.
 
-📊 **Access**: Available on HuggingFace (link to be added)
+📊 **Access**:
+- **In this repository**: `cache/raw_data/ir_triplets/ir_triplets.json`
+- **HuggingFace**: [Coming soon]
 
 📄 **Paper**: [Inductive Triplet Fine-Tuning for Small Language Models](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5529459)
 
