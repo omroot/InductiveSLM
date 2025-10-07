@@ -3,6 +3,27 @@
 ## Introduction
 This repository implements methods for fine-tuning small language models to enhance their inductive reasoning capabilities using triplet-based training data. The project focuses on improving model performance on inductive reasoning tasks through LoRA (Low-Rank Adaptation) fine-tuning.
 
+## Paper & Dataset
+
+📄 **Paper**: [Inductive Triplet Fine-Tuning for Small Language Models](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5529459)
+
+📊 **IR-Triplet Dataset**: Available on HuggingFace (link to be added)
+
+### Citation
+
+If you use the **IR-Triplet benchmark** or this codebase in your research, please cite:
+
+```bibtex
+@article{missaoui2025inductive,
+  title={Inductive Triplet Fine-Tuning for Small Language Models},
+  author={Missaoui, Oualid},
+  journal={SSRN Electronic Journal},
+  year={2025},
+  doi={10.2139/ssrn.5529459},
+  url={https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5529459}
+}
+```
+
 ## Key Features
 - **Triplet-based Training**: Converts inductive reasoning datasets into observation-question-answer triplets
 - **LoRA Fine-tuning**: Memory-efficient fine-tuning using PEFT (Parameter-Efficient Fine-Tuning)
@@ -126,9 +147,22 @@ metrics = eval_metrics(predictions, references, rouge, bleu)
 ```
 
 ## Datasets
-The project supports:
-- **IR-Triplets**: Inductive reasoning triplet dataset
-- **DEER**: Dataset for evaluating reasoning (converted to triplet format)
+
+### IR-Triplet Benchmark
+
+The **IR-Triplet benchmark** is a novel dataset for evaluating inductive reasoning in language models. It consists of triplet-based inductive reasoning tasks designed to test models' ability to generalize from observations.
+
+📊 **Access**: Available on HuggingFace (link to be added)
+
+📄 **Paper**: [Inductive Triplet Fine-Tuning for Small Language Models](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5529459)
+
+⚠️ **Citation Required**: If you use the IR-Triplet benchmark in your research, please cite the paper (see [Citation](#citation) section above).
+
+### Supported Datasets
+
+The project currently supports:
+- **IR-Triplets**: Our inductive reasoning triplet dataset (primary benchmark)
+- **DEER**: Dataset for evaluating reasoning (converted to triplet format for out-of-distribution testing)
 
 ## Dependencies
 Key dependencies include:
@@ -163,5 +197,17 @@ python -m ipykernel install --user --name <your_env_name> --display-name "Python
 jupyter lab
 ```
 
+## Acknowledgments
+
+This work is based on the research presented in:
+
+**Inductive Triplet Fine-Tuning for Small Language Models**
+Available at: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5529459
+
+If you use this codebase or the IR-Triplet benchmark, please cite the paper.
+
 ## License
+
 This project is released under the MIT license. Please see the [LICENSE](LICENSE) file for more information.
+
+**Note**: While the code is MIT licensed, if you use the **IR-Triplet dataset benchmark**, please cite the associated research paper.
