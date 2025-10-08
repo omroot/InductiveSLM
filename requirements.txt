@@ -6,6 +6,7 @@ pandas
 openpyxl
 ipywidgets
 setuptools>=61.0.0
+networkx>=3.0
 # =========================
 # Visualization & Apps
 # =========================
