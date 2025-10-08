@@ -83,6 +83,19 @@ InductiveSLM/
 
 ## Usage
 
+### IR-Triplet Dataset Dashboard
+
+Explore the IR-Triplet benchmark interactively:
+```bash
+streamlit run dashboard_ir_triplets.py
+```
+
+Features:
+- Browse triplets with pagination
+- Filter by reasoning form
+- View statistics and distributions
+- Export filtered data (JSON, CSV, Markdown)
+
 ### Quick Start - Single Model
 
 Evaluate a single model:
