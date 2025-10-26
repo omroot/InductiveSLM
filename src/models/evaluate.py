@@ -160,9 +160,10 @@ def print_compare(baseline: dict[str, float], finetuned: dict[str, float]):
         finetuned: Fine-tuned model metrics
     """
     print("\n===== Metrics (Baseline vs Fine-tuned) =====")
-    keys = ["rouge1", "rouge2", "rougeL", "rougeLsum", "bleu"]
+    keys = ["rouge1", "rouge2", "rougeL", "rougeLsum", "bleu", "semantic_accuracy"]
     for k in keys:
-        print(f"{k:10s}  base: {baseline[k]:6.3f}   ft: {finetuned[k]:6.3f}   Δ: {finetuned[k]-baseline[k]:+6.3f}")
+        if k in baseline and k in finetuned:
+            print(f"{k:18s}  base: {baseline[k]:6.3f}   ft: {finetuned[k]:6.3f}   Δ: {finetuned[k]-baseline[k]:+6.3f}")
 
 
 def extract_triplets_from_dataset(ds: Dataset) -> Tuple[List[str], List[str], List[str], List[str]]:
@@ -443,21 +444,44 @@ def evaluate_model_pipeline(
     id_baseline_metrics = eval_metrics(id_baseline_preds, id_refs, rouge, bleu)
     print(f"  - In-distribution baseline metrics: {id_baseline_metrics}")
 
+    # Evaluate semantic similarity for baseline
+    print("  - Evaluating semantic similarity for in-distribution baseline...")
+    id_baseline_semantic = eval_semantic_similarity_openai(id_baseline_preds, id_refs)
+    print(f"  - In-distribution baseline semantic accuracy: {id_baseline_semantic['accuracy']:.3f}")
+
+    # Merge semantic metrics into baseline metrics
+    id_baseline_metrics['semantic_accuracy'] = id_baseline_semantic['accuracy']
+
     # Save in-distribution baseline predictions
     save_predictions(output_dir, "id_val_predictions_baseline.jsonl",
                     id_obs, id_qs, id_refs, id_baseline_preds)
 
+    # Save semantic evaluation results
+    save_semantic_evaluation_results(output_dir, "id_baseline_semantic_eval", id_baseline_semantic)
+
     # Evaluate baseline on out-of-distribution (if provided)
     od_baseline_metrics = None
+    od_baseline_semantic = None
     if od_dataset:
         print("  - Generating out-of-distribution baseline predictions...")
         od_baseline_preds = generate_answers_with(baseline_model, tokenizer, od_obs, od_qs)
         od_baseline_metrics = eval_metrics(od_baseline_preds, od_refs, rouge, bleu)
         print(f"  - Out-of-distribution baseline metrics: {od_baseline_metrics}")
 
+        # Evaluate semantic similarity for OD baseline
+        print("  - Evaluating semantic similarity for out-of-distribution baseline...")
+        od_baseline_semantic = eval_semantic_similarity_openai(od_baseline_preds, od_refs)
+        print(f"  - Out-of-distribution baseline semantic accuracy: {od_baseline_semantic['accuracy']:.3f}")
+
+        # Merge semantic metrics into baseline metrics
+        od_baseline_metrics['semantic_accuracy'] = od_baseline_semantic['accuracy']
+
         # Save out-of-distribution baseline predictions
         save_predictions(output_dir, "od_val_predictions_baseline.jsonl",
                         od_obs, od_qs, od_refs, od_baseline_preds)
+
+        # Save semantic evaluation results
+        save_semantic_evaluation_results(output_dir, "od_baseline_semantic_eval", od_baseline_semantic)
 
     # Free baseline model memory
     del baseline_model
@@ -511,21 +535,44 @@ def evaluate_model_pipeline(
     id_finetuned_metrics = eval_metrics(id_finetuned_preds, id_refs, rouge, bleu)
     print(f"  - In-distribution fine-tuned metrics: {id_finetuned_metrics}")
 
+    # Evaluate semantic similarity for finetuned
+    print("  - Evaluating semantic similarity for in-distribution fine-tuned...")
+    id_finetuned_semantic = eval_semantic_similarity_openai(id_finetuned_preds, id_refs)
+    print(f"  - In-distribution fine-tuned semantic accuracy: {id_finetuned_semantic['accuracy']:.3f}")
+
+    # Merge semantic metrics into finetuned metrics
+    id_finetuned_metrics['semantic_accuracy'] = id_finetuned_semantic['accuracy']
+
     # Save in-distribution fine-tuned predictions
     save_predictions(output_dir, "id_val_predictions_finetuned.jsonl",
                     id_obs, id_qs, id_refs, id_finetuned_preds)
 
+    # Save semantic evaluation results
+    save_semantic_evaluation_results(output_dir, "id_finetuned_semantic_eval", id_finetuned_semantic)
+
     # Evaluate fine-tuned on out-of-distribution (if provided)
     od_finetuned_metrics = None
+    od_finetuned_semantic = None
     if od_dataset:
         print("  - Generating out-of-distribution fine-tuned predictions...")
         od_finetuned_preds = generate_answers_with(finetuned_model, tokenizer, od_obs, od_qs)
         od_finetuned_metrics = eval_metrics(od_finetuned_preds, od_refs, rouge, bleu)
         print(f"  - Out-of-distribution fine-tuned metrics: {od_finetuned_metrics}")
 
+        # Evaluate semantic similarity for OD finetuned
+        print("  - Evaluating semantic similarity for out-of-distribution fine-tuned...")
+        od_finetuned_semantic = eval_semantic_similarity_openai(od_finetuned_preds, od_refs)
+        print(f"  - Out-of-distribution fine-tuned semantic accuracy: {od_finetuned_semantic['accuracy']:.3f}")
+
+        # Merge semantic metrics into finetuned metrics
+        od_finetuned_metrics['semantic_accuracy'] = od_finetuned_semantic['accuracy']
+
         # Save out-of-distribution fine-tuned predictions
         save_predictions(output_dir, "od_val_predictions_finetuned.jsonl",
                         od_obs, od_qs, od_refs, od_finetuned_preds)
+
+        # Save semantic evaluation results
+        save_semantic_evaluation_results(output_dir, "od_finetuned_semantic_eval", od_finetuned_semantic)
 
     # Save model and tokenizer
     print("\n  - Saving fine-tuned model adapters...")
