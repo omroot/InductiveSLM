@@ -8,9 +8,11 @@ import torch
 import evaluate
 from datasets import Dataset
 from transformers import AutoTokenizer, AutoModelForCausalLM
+from openai import OpenAI
 
 from src.models.inference.inference import generate_answers_with
 from src.models.sft.lora import finetune_model_with_lora
+from src.config import OPENAI_API_KEY
 
 try:
     import weightwatcher as ww
@@ -49,6 +51,104 @@ def eval_metrics(preds: list[str],
     except Exception as e:
         print(f"Error computing metrics: {e}")
         return {"rouge1": 0.0, "rouge2": 0.0, "rougeL": 0.0, "rougeLsum": 0.0, "bleu": 0.0}
+
+
+def eval_semantic_similarity_openai(
+    preds: List[str],
+    refs: List[str],
+    model: str = "gpt-4o-mini",
+    temperature: float = 0.0,
+    max_retries: int = 3
+) -> Dict[str, float]:
+    """
+    Evaluate semantic similarity between predictions and references using OpenAI.
+
+    Args:
+        preds: List of predicted answers
+        refs: List of reference answers
+        model: OpenAI model to use for evaluation (default: gpt-4o-mini)
+        temperature: Temperature for OpenAI API (default: 0.0 for deterministic)
+        max_retries: Maximum number of retries for failed API calls
+
+    Returns:
+        Dictionary containing accuracy and detailed results
+    """
+    if not OPENAI_API_KEY:
+        raise ValueError("OPENAI_API_KEY not found in environment variables")
+
+    client = OpenAI(api_key=OPENAI_API_KEY)
+
+    if len(preds) != len(refs):
+        raise ValueError(f"Length mismatch: {len(preds)} predictions vs {len(refs)} references")
+
+    total = len(preds)
+    correct = 0
+    results = []
+
+    print(f"\nEvaluating semantic similarity for {total} examples using {model}...")
+
+    for i, (pred, ref) in enumerate(zip(preds, refs)):
+        # Create prompt for semantic similarity evaluation
+        prompt = f"""Compare the following two answers and determine if they convey the same meaning.
+
+Predicted Answer: {pred}
+
+Ground Truth Answer: {ref}
+
+Do these answers have the same meaning? Respond with ONLY "Yes" or "No"."""
+
+        retry_count = 0
+        success = False
+        response_text = None
+
+        while retry_count < max_retries and not success:
+            try:
+                response = client.chat.completions.create(
+                    model=model,
+                    messages=[
+                        {"role": "system", "content": "You are an expert evaluator that compares answers for semantic similarity. Respond only with 'Yes' or 'No'."},
+                        {"role": "user", "content": prompt}
+                    ],
+                    temperature=temperature,
+                    max_tokens=10
+                )
+
+                response_text = response.choices[0].message.content.strip()
+                success = True
+
+            except Exception as e:
+                retry_count += 1
+                print(f"  Error on example {i+1}/{total} (attempt {retry_count}/{max_retries}): {e}")
+                if retry_count >= max_retries:
+                    print(f"  Failed after {max_retries} retries. Marking as incorrect.")
+                    response_text = "No"
+
+        # Parse response
+        is_correct = response_text.lower().startswith("yes")
+
+        if is_correct:
+            correct += 1
+
+        results.append({
+            "prediction": pred,
+            "reference": ref,
+            "evaluation": response_text,
+            "is_correct": is_correct
+        })
+
+        # Print progress
+        if (i + 1) % 10 == 0 or (i + 1) == total:
+            current_accuracy = correct / (i + 1)
+            print(f"  Progress: {i+1}/{total} | Current Accuracy: {current_accuracy:.4f}")
+
+    accuracy = correct / total if total > 0 else 0.0
+
+    return {
+        "accuracy": accuracy,
+        "correct": correct,
+        "total": total,
+        "results": results
+    }
 
 
 def print_compare(baseline: dict[str, float], finetuned: dict[str, float]):
@@ -112,6 +212,42 @@ def save_predictions(output_dir: str,
             }, ensure_ascii=False) + "\n")
 
     print(f"Saved predictions to {filepath}")
+
+
+def save_semantic_evaluation_results(
+    output_dir: str,
+    filename: str,
+    evaluation_results: Dict
+):
+    """
+    Save semantic evaluation results to JSON files.
+
+    Args:
+        output_dir: Output directory path
+        filename: Output filename (without extension)
+        evaluation_results: Results from eval_semantic_similarity_openai
+    """
+    os.makedirs(output_dir, exist_ok=True)
+
+    # Save summary
+    summary_filepath = os.path.join(output_dir, f"{filename}_summary.json")
+    summary = {
+        "accuracy": evaluation_results["accuracy"],
+        "correct": evaluation_results["correct"],
+        "total": evaluation_results["total"],
+        "timestamp": datetime.now().isoformat()
+    }
+
+    with open(summary_filepath, "w") as f:
+        json.dump(summary, f, indent=2)
+    print(f"Saved semantic evaluation summary to {summary_filepath}")
+
+    # Save detailed results
+    detailed_filepath = os.path.join(output_dir, f"{filename}_detailed.jsonl")
+    with open(detailed_filepath, "w") as f:
+        for result in evaluation_results["results"]:
+            f.write(json.dumps(result, ensure_ascii=False) + "\n")
+    print(f"Saved detailed semantic evaluation to {detailed_filepath}")
 
 
 def analyze_model_quality(model, model_name: str = "model") -> Optional[Dict]:

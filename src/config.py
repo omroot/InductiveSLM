@@ -11,7 +11,7 @@ except Exception as e:
 
 # Env setup configs
 
-
+OPENAI_API_KEY =  os.getenv("OPENAI_API_KEY")
 HUGGINGFACE_HUB_TOKEN =  os.getenv("HUGGINGFACE_HUB_TOKEN")
 
 
