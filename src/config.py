@@ -48,16 +48,16 @@ else:
 
 
 MODEL_ID_LIST = [
-    "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+    # "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
     "Qwen/Qwen2.5-1.5B-Instruct",
-    "google/gemma-2-2b-it",
-    "deepseek-ai/deepseek-llm-7b-base",
-    "allenai/OLMo-7B-0424-hf",
-    "google/gemma-7b-it",
-    "unsloth/Meta-Llama-3.1-8B",
-    "swiss-ai/Apertus-8B-2509",
-    "google/gemma-2-9b",
-    "01-ai/Yi-9B"
+    # "google/gemma-2-2b-it",
+    # "deepseek-ai/deepseek-llm-7b-base",
+    # "allenai/OLMo-7B-0424-hf",
+    # "google/gemma-7b-it",
+    # "unsloth/Meta-Llama-3.1-8B",
+    # "swiss-ai/Apertus-8B-2509",
+    # "google/gemma-2-9b",
+    # "01-ai/Yi-9B"
 ]
 
 # Output directories for each model (under cache/models/)

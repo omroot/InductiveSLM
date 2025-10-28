@@ -1,6 +1,7 @@
 .DS_Store
 .idea/
 .vscode/
+.debug/
 __pycache__/
 .ipynb_checkpoints/
 *.log
